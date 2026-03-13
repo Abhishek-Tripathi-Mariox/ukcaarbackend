@@ -1,0 +1,217 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "test-ride-booking",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-ride-booking",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-ride-booking",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-ride-booking",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-driver-acceptance",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-driver-acceptance",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-driver-acceptance",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-driver-acceptance",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-driver-acceptance",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"mocha",
+				"--recursive",
+				"--timeout",
+				"10000"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-driver-acceptance",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"mocha",
+				"--recursive",
+				"--timeout",
+				"10000"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-driver-acceptance",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"mocha",
+				"--recursive",
+				"--timeout",
+				"10000"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-chai-http",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"mocha",
+				"test/chaiHttpTest.js"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-chai-http",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"mocha",
+				"test/chaiHttpTest.js"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-driver-acceptance",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"mocha",
+				"--recursive",
+				"--timeout",
+				"10000"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		},
+		{
+			"label": "test-driver-acceptance",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"mocha",
+				"--recursive",
+				"--timeout",
+				"10000"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		}
+	]
+}

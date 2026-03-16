@@ -69,7 +69,19 @@ userRouter.put(
     ErrorHandlerMiddleware(DriverController().updateActiveInactiveStatus),
     ResponseMiddleware
 );
+userRouter.get(
+    "/get-all-drivers",
+    AuthMiddleware().verifyDriverToken,
+    ErrorHandlerMiddleware(DriverController().getAllDrivers),
+    ResponseMiddleware  
+)
 
+userRouter.get(
+    "/get-scheduled-rides",
+    AuthMiddleware().verifyDriverToken,
+    ErrorHandlerMiddleware(DriverController().getScheduleRides),
+    ResponseMiddleware  
+)
 
 
 module.exports = userRouter;

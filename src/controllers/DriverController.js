@@ -2,7 +2,7 @@ const DriverService = require("../services/DriverService");
 const otpUtil = require("../util/otpUtil");
 const tokenUtil = require("../util/tokenUtil");
 const fileUploadService = require("../util/s3");
-
+const RideService = require("../services/RideService");
 
 module.exports = () => {
 
@@ -313,7 +313,55 @@ module.exports = () => {
 
         next();
     };
+    const getAllDrivers = async (req, res, next) => {
+        try {
+            let { page = 1, limit = 10 } = req.query;
 
+            page = parseInt(page);
+            limit = parseInt(limit);
+
+            const skip = (page - 1) * limit;
+
+            const drivers = await DriverService().fetchAll({}, {}, { skip, limit });
+            const totalDrivers = await DriverService().count({});
+
+            req.rData = {
+                drivers,
+                pagination: {
+                    total: totalDrivers,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(totalDrivers / limit)
+                }
+            };
+
+            req.msg = "Drivers fetched successfully";
+        } catch (error) {
+            req.msg = "Failed to fetch drivers";
+            req.error = error;
+        }
+
+        next();
+    };
+
+    const getScheduleRides = async (req, res, next) => {
+        try {
+            const { driverId } = req.body;
+
+            // Fetch scheduled rides for the driver
+            const scheduledRides = await RideService().fetchAll({
+                driverId,
+                status: "Scheduled"
+            });
+            const count = await RideService().count({ driverId, status: "Scheduled" });
+            req.rData = { scheduledRides, count };
+            req.msg = "Scheduled rides fetched successfully";
+        } catch (error) {
+            req.msg = "Failed to fetch scheduled rides";
+            req.error = error;
+        }
+        next();
+    };
     return {
         sendOtp,
         verifyOtp,
@@ -323,6 +371,8 @@ module.exports = () => {
         updateBankDetail,
         updateDrivingLicenseDetails,
         updateDrivingRcDetails,
-        updateActiveInactiveStatus
+        updateActiveInactiveStatus,
+        getAllDrivers,
+        getScheduleRides
     };
 }

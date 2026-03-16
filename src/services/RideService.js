@@ -72,6 +72,24 @@ module.exports = () => {
       throw new Error("Database error");
     }
   };
+  const fetchAll = async (query = {}) => {
+    try {
+      return await Ride.find(query)
+        .sort({ createdAt: -1 });
+    } catch (error) {
+      console.error("Error fetching rides", { error: error.message });
+      throw new Error("Database error");
+    }
+  } 
+
+  const count = async (query = {}) => {
+    try {
+      return await Ride.countDocuments(query);
+    } catch (error) {
+      console.error("Error counting rides", { error: error.message });
+      throw new Error("Database error");
+    }
+  }
 
   return {
     create,
@@ -81,5 +99,6 @@ module.exports = () => {
     assignDriver,
     countByQuery,
     update,
+    fetchAll
   };
 };

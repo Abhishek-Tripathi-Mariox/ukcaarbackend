@@ -40,6 +40,7 @@ const DriverSchema = new Schema(
       },
 
       insurance: {
+        number: { type: String, default: "" },
         file: { type: String, default: "" },
         expiryDate: { type: Date, default: null },
       },
@@ -71,8 +72,23 @@ const DriverSchema = new Schema(
     },
 
     isVerified: { type: Boolean, default: false },
+
+    currentLocation: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        default: [0, 0],
+      },
+    },
+    lastLocationUpdatedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );
+
+DriverSchema.index({ currentLocation: "2dsphere" });
 
 module.exports = mongoose.model("Driver", DriverSchema);

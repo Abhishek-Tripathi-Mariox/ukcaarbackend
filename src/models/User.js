@@ -5,6 +5,8 @@ const UserSchema = new Schema(
   {
     fullname: { type: String, default: "" },
     mobile: { type: String, default: "" },
+    phone: { type: String, default: "" },
+    address: { type: String, default: "" },
     profileImage: {
       type: String,
       default: "",
@@ -31,6 +33,7 @@ const UserSchema = new Schema(
     state: { type: String, default: "" },
     zipCode: { type: String, default: "" },
     referralCode: { type: String, default: "" },
+    referrerId: { type: Schema.Types.ObjectId, ref: "User", default: null },
     pushNotification: { type: Boolean, default: true },
     promotionalNotification: { type: Boolean, default: true },
 

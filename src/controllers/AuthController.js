@@ -14,7 +14,6 @@ module.exports = () => {
       console.log(`Sending OTP ${otp} to mobile ${mobile}`);
       req.rData = { mobile,otp:"115577" };
       req.msg = "OTP sent successfully";
-      next()
     } catch (error) {
     console.error("Error sending OTP", error);
       req.msg = "Failed to send OTP";
@@ -129,11 +128,36 @@ module.exports = () => {
     next();
   };
 
+  const updateNotificationSettings = async (req, res, next) => {
+    try {
+      const { userId, pushNotification, promotionalNotification } = req.body;
+
+      const updateData = {};
+      if (pushNotification !== undefined) updateData.pushNotification = !!pushNotification;
+      if (promotionalNotification !== undefined) updateData.promotionalNotification = !!promotionalNotification;
+
+      if (Object.keys(updateData).length === 0) {
+        req.rCode = 0;
+        req.msg = "No fields to update";
+        return next();
+      }
+
+      const user = await UserService().update({ _id: userId }, updateData);
+      req.rData = { user };
+      req.msg = "Notification settings updated successfully";
+    } catch (error) {
+      req.msg = "Failed to update notification settings";
+      req.error = error;
+    }
+    next();
+  };
+
   return {
     sendOtp,
     verifyOtp,
     updateProfile,
     applyReferralCode,
     getUserDetails,
+    updateNotificationSettings,
   };
 };

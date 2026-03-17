@@ -25,7 +25,9 @@ module.exports = () => {
 
     const update = async (query, data) => {
         try {
-            return await Driver.findOneAndUpdate(query, data, { new: true });
+            const hasOperator = data && Object.keys(data).some((k) => k.startsWith("$"));
+            const normalizedUpdate = hasOperator ? data : { $set: data };
+            return await Driver.findOneAndUpdate(query, normalizedUpdate, { new: true });
         } catch (error) {
             console.error("Error updating driver", { error: error.message });
             throw new Error("Database error");

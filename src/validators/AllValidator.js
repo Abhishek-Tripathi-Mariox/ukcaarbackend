@@ -41,6 +41,13 @@ module.exports = () => {
     });
     validate(v, res, next, req);
   }
+
+  const validateApplyReferralCode = async (req, res, next) => {
+    const v = new Validator(req.body, {
+      referralCode: validations.general.requiredString,
+    });
+    validate(v, res, next, req);
+  };
   
   const bookRideValidator = async (req, res, next) => {
     const v = new Validator(req.body, {
@@ -67,6 +74,7 @@ const scheduleRideValidator = async (req, res, next) => {
     dropoffLongitude: "required|numeric|min:-180|max:180",
 
     rideType: "required|in:Economy,Premium,Comfort",
+    scheduledTime: validations.general.requiredString,
 
   });
 
@@ -79,6 +87,82 @@ const acceptRideValidator = async (req, res, next) => {
     driverId: validations.general.requiredString
   });
 
+  validate(v, res, next, req);
+};
+
+const validateDriverRideId = async (req, res, next) => {
+  const v = new Validator(req.body, {
+    rideId: validations.general.requiredString,
+  });
+  validate(v, res, next, req);
+};
+
+const validateVerifyPickupOtp = async (req, res, next) => {
+  const v = new Validator(req.body, {
+    rideId: validations.general.requiredString,
+    otp: validations.general.requiredString,
+  });
+  validate(v, res, next, req);
+};
+
+const validateUpdateDriverLocation = async (req, res, next) => {
+  const v = new Validator(req.body, {
+    latitude: "required|numeric|min:-90|max:90",
+    longitude: "required|numeric|min:-180|max:180",
+  });
+  validate(v, res, next, req);
+};
+
+const validateCompleteRide = async (req, res, next) => {
+  const v = new Validator(req.body, {
+    rideId: validations.general.requiredString,
+    fare: "numeric",
+    distanceKm: "numeric",
+    durationMin: "numeric",
+  });
+  validate(v, res, next, req);
+};
+
+const validateSubmitReview = async (req, res, next) => {
+  const v = new Validator(req.body, {
+    rideId: validations.general.requiredString,
+    rating: "required|integer|min:1|max:5",
+    comment: "string",
+  });
+  validate(v, res, next, req);
+};
+
+const validateCashoutRequest = async (req, res, next) => {
+  const v = new Validator(req.body, {
+    amount: "required|numeric|min:1",
+    note: "string",
+  });
+  validate(v, res, next, req);
+};
+
+const validateCancelCashout = async (req, res, next) => {
+  const v = new Validator(req.body, {
+    cashoutId: validations.general.requiredString,
+  });
+  validate(v, res, next, req);
+};
+
+const validateMarkRidePaid = async (req, res, next) => {
+  const v = new Validator(req.body, {
+    rideId: validations.general.requiredString,
+    paymentMethodId: "string",
+    paymentRef: "string",
+  });
+  validate(v, res, next, req);
+};
+
+const validateEmergencySos = async (req, res, next) => {
+  const v = new Validator(req.body, {
+    rideId: "string",
+    message: "string",
+    latitude: "numeric",
+    longitude: "numeric",
+  });
   validate(v, res, next, req);
 };
   
@@ -96,9 +180,19 @@ const acceptRideValidator = async (req, res, next) => {
     validateVerifyOtp,
     validateAddAddress,
     validateAddPaymentMethod,
+    validateApplyReferralCode,
     bookRideValidator,
     scheduleRideValidator,
     acceptRideValidator,
+    validateDriverRideId,
+    validateVerifyPickupOtp,
+    validateUpdateDriverLocation,
+    validateCompleteRide,
+    validateSubmitReview,
+    validateCashoutRequest,
+    validateCancelCashout,
+    validateMarkRidePaid,
+    validateEmergencySos,
     validateRegisterRider,
 }
 };

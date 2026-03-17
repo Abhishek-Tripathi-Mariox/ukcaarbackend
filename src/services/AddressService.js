@@ -29,9 +29,31 @@ module.exports = () => {
     }
   };
 
+  const update = async (query, data) => {
+    try {
+      const hasOperator = data && Object.keys(data).some((k) => k.startsWith("$"));
+      const normalizedUpdate = hasOperator ? data : { $set: data };
+      return await Address.findOneAndUpdate(query, normalizedUpdate, { new: true });
+    } catch (error) {
+      console.error("Error updating address", { error: error.message });
+      throw new Error("Database error");
+    }
+  };
+
+  const fetchOne = async (query) => {
+    try {
+      return await Address.findOne(query);
+    } catch (error) {
+      console.error("Error fetching address", { error: error.message });
+      throw new Error("Database error");
+    }
+  };
+
   return {
     create,
     fetchByQuery,
     deleteAddress,
+    update,
+    fetchOne,
   };
 };

@@ -11,11 +11,42 @@ module.exports = () => {
     }
   };
 
-  const fetchByQuery = async (query) => {
+  const fetchByQuery = async (query, projection = null, options = {}) => {
     try {
-      return await Ride.find(query).sort({ createdAt: -1 }); // Sort by most recent rides
+      const { skip, limit, sort } = options || {};
+      let q = Ride.find(query, projection);
+      if (skip !== undefined) q = q.skip(skip);
+      if (limit !== undefined) q = q.limit(limit);
+      // Default sort by most recent rides unless caller overrides or query uses $near
+      if (sort) {
+        q = q.sort(sort);
+      } else if (!query || !query.pickupLocation || !query.pickupLocation.$near) {
+        q = q.sort({ createdAt: -1 });
+      }
+      return await q;
     } catch (error) {
       console.error("Error fetching rides by query", { error: error.message });
+      throw new Error("Database error");
+    }
+  };
+
+  const fetchOne = async (query, projection = null, options = {}) => {
+    try {
+      const { sort } = options || {};
+      let q = Ride.findOne(query, projection);
+      if (sort) q = q.sort(sort);
+      return await q;
+    } catch (error) {
+      console.error("Error fetching ride", { error: error.message });
+      throw new Error("Database error");
+    }
+  };
+
+  const fetchById = async (id) => {
+    try {
+      return await Ride.findById(id);
+    } catch (error) {
+      console.error("Error fetching ride by id", { error: error.message });
       throw new Error("Database error");
     }
   };
@@ -43,9 +74,13 @@ module.exports = () => {
 
   const assignDriver = async (rideId, driverId) => {
     try {
-      return await Ride.findByIdAndUpdate(
-        rideId,
-        { driverId, status: "booked" },
+      return await Ride.findOneAndUpdate(
+        {
+          _id: rideId,
+          driverId: null,
+          status: { $in: ["requested", "booked", "scheduled"] },
+        },
+        { $set: { driverId, status: "accepted", acceptedAt: new Date() } },
         { new: true }
       );
     } catch (error) {
@@ -64,11 +99,29 @@ module.exports = () => {
 
   const update = async (query, updateData) => {
     try {
-      return await Ride.findOneAndUpdate(query, updateData, {
-        returnDocument: "after",
-      });
+      const hasOperator = updateData && Object.keys(updateData).some((k) => k.startsWith("$"));
+      const normalizedUpdate = hasOperator ? updateData : { $set: updateData };
+      return await Ride.findOneAndUpdate(query, normalizedUpdate, { new: true });
     } catch (error) {
       console.error("Error updating ride", { error: error.message });
+      throw new Error("Database error");
+    }
+  };
+
+  const findOneAndUpdate = async (query, updateData, options = {}) => {
+    try {
+      return await Ride.findOneAndUpdate(query, updateData, { new: true, ...options });
+    } catch (error) {
+      console.error("Error in findOneAndUpdate ride", { error: error.message });
+      throw new Error("Database error");
+    }
+  };
+
+  const aggregate = async (pipeline) => {
+    try {
+      return await Ride.aggregate(pipeline);
+    } catch (error) {
+      console.error("Error aggregating rides", { error: error.message });
       throw new Error("Database error");
     }
   };
@@ -94,11 +147,15 @@ module.exports = () => {
   return {
     create,
     fetchByQuery,
+    fetchOne,
+    fetchById,
     scheduleRide,
     fetchScheduledRides,
     assignDriver,
     countByQuery,
     update,
+    findOneAndUpdate,
+    aggregate,
     fetchAll
   };
 };

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon index.js",
     "start": "nodemon index.js",
     "test": "mocha --recursive --timeout 10000"
   },
@@ -25,6 +26,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.2",
     "node-input-validator": "^4.6.0",
+    "nodemailer": "^6.10.1",
     "redis": "^5.11.0",
     "uuid": "^13.0.0"
   },

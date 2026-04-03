@@ -9,6 +9,7 @@ con.on("open", async () => {
   console.log("Connected to database");
 
   try {
+    await require("../seeds/adminSeeder")();
   } catch (error) {
     console.error("Seeder error", { error: error.message });
   }

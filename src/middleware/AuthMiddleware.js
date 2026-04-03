@@ -3,6 +3,7 @@ const ResponseMiddleware = require("./ResponseMiddleware");
 const JWTSECRET = process.env.JWTSECRET;
 const UserService = require("../services/UserService");
 const DriverService = require("../services/DriverService");
+const AdminService = require("../services/AdminService");
 
 module.exports = () => {
   const verifyUserToken = async (req, res, next) => {
@@ -42,6 +43,7 @@ module.exports = () => {
       ResponseMiddleware(req, res, next);
     }
   };
+  //
   const verifyDriverToken = async (req, res, next) => {
     let usertoken = req.headers.authorization;
     try {
@@ -78,11 +80,48 @@ module.exports = () => {
       ResponseMiddleware(req, res, next);
     }
   };
+  // Admin token verification middleware...
+  const verifyAdminToken = async (req, res, next) => {
+    let usertoken = req.headers.authorization;
+    try {
+      if (usertoken) {
+        let tokens = usertoken.split(" ");
+        let token = tokens[1];
+        let payload = jwt.verify(token, JWTSECRET);
+
+        let admin = await AdminService().fetchByQuery({
+          _id: payload.adminId,
+        });
+
+        if (admin && admin.isActive) {
+          console.log(`Admin ${admin._id} authenticated`);
+          req.body = {
+            ...(req.body || {}),
+            adminId: admin._id,
+          };
+          next();
+        } else if (admin && !admin.isActive) {
+          throw new Error("ac_deactivated");
+        } else {
+          throw new Error("invalid_token");
+        }
+      } else {
+        throw new Error("invalid_token");
+      }
+    } catch (ex) {
+      req.rCode = 3;
+      req.msg = "invalid_token";
+      if (ex.message == "ac_deactivated") req.msg = ex.message;
+
+      ResponseMiddleware(req, res, next);
+    }
+  };
 
  
   return {
     verifyUserToken,
-    verifyDriverToken
+    verifyDriverToken,
+    verifyAdminToken,
 
   };
 };
